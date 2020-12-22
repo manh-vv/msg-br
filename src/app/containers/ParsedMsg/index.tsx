@@ -14,7 +14,7 @@ import { parsedMsgSaga } from './saga';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ReactTooltip from 'react-tooltip';
 
-function CopyableView({ id, className = '', text, onCopy = null }) {
+function CopyableView({ id, text, type, onCopy = null }) {
   const hint = 'click to copy';
   const [hintText, setHintText] = useState(hint);
 
@@ -27,7 +27,12 @@ function CopyableView({ id, className = '', text, onCopy = null }) {
   return (
     <>
       <CopyToClipboard text={text} onCopy={onCopy || handleCopy}>
-        <span className={className} data-tip data-for={id} style={{ cursor: 'pointer' }}>
+        <span
+          className={`${type === 'number' && 'text-success'}`}
+          data-tip
+          data-for={id}
+          style={{ cursor: 'pointer' }}
+        >
           {text}
         </span>
       </CopyToClipboard>
@@ -50,54 +55,48 @@ export function ParsedMsg() {
       <div>
         <strong>Parsed message</strong>
         <div className="table-responsive-sm">
-          <table className="table table-sm table-striped">
+          <table className="table table-sm table-striped table-bordered">
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Message</th>
-                <th scope="col">Left part</th>
-                <th scope="col">Value</th>
-                <th scope="col">Right part</th>
+                <th scope="col">message</th>
+                {new Array(parsedMsg.maxPosCol).fill(null).map((_, i) => (
+                  <th scope="col" key={i}>{`possible ${i + 1}`}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {parsedMsg && parsedMsg.length ? (
-                parsedMsg.map((item, idx) => (
+              {parsedMsg.msgParts.length ? (
+                parsedMsg.msgParts.map((item, idx) => (
                   <tr key={idx}>
                     <th scope="row">{idx + 1}</th>
                     <td>
-                      {item.msg && (
-                        <CopyableView
-                          id={`${idx}__${item.msg?.replace(/[^\w]+/)}`}
-                          text={item.msg}
-                        />
-                      )}
+                      {item.parts.map((p, i) => (
+                        <span key={i}>
+                          <CopyableView
+                            id={`${idx}_${i}_${p.text.replace(/[^\w]+/g, '')}`}
+                            text={p.text}
+                            type={p.type}
+                          />{' '}
+                        </span>
+                      ))}
                     </td>
-                    <td>
-                      {item.leftPart && (
-                        <CopyableView
-                          id={`${idx}__${item.leftPart?.replace(/[^\w]+/)}`}
-                          text={item.leftPart}
-                        />
-                      )}
-                    </td>
-                    <td>
-                      {item.v && (
-                        <CopyableView
-                          id={`${idx}__${item.v?.replace(/[^\w]+/)}`}
-                          text={item.value}
-                          className="badge badge-success"
-                        />
-                      )}
-                    </td>
-                    <td>
-                      {item.rightPart && (
-                        <CopyableView
-                          id={`${idx}__${item.rightPart?.replace(/[^\w]+/)}`}
-                          text={item.rightPart}
-                        />
-                      )}
-                    </td>
+                    {item.posVParts &&
+                      item.posVParts.map((p, i) => (
+                        <td key={i}>
+                          <CopyableView
+                            id={`${idx}_${i}_${p.text.replace(/[^\w]+/g, '')}`}
+                            text={p.text}
+                            type={p.type}
+                          />
+                        </td>
+                      ))}
+
+                    {new Array(parsedMsg.maxPosCol - (item.posVParts?.length || 0))
+                      .fill(null)
+                      .map((_, i) => (
+                        <td key={i}></td>
+                      ))}
                   </tr>
                 ))
               ) : (

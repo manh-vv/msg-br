@@ -21,11 +21,11 @@ export function App() {
   return (
     <BrowserRouter>
       <Helmet
-        titleTemplate="%s - React Boilerplate"
-        defaultTitle="React Boilerplate"
+        titleTemplate="%s - message parser"
+        defaultTitle="msg-br"
         htmlAttributes={{ lang: i18n.language }}
       >
-        <meta name="description" content="A React Boilerplate application" />
+        <meta name="description" content="Message parser" />
       </Helmet>
 
       <Switch>

@@ -1,34 +1,38 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
+import { MsgPartContainer } from 'types/MsgPartContainer';
 import { selectOriginMsg } from '../OriginalMsg/selectors';
 import { originalMsgActions } from '../OriginalMsg/slice';
+import parseMessage from './parser';
 import { parsedMsgActions } from './slice';
 
 export function* parseMsg() {
   const msg = yield select(selectOriginMsg);
 
-  const payload = msg
+  const msgPartContainer: MsgPartContainer = {
+    msgParts: [],
+    maxCol: 0,
+    maxPosCol: 0,
+  };
+
+  msgPartContainer.msgParts = msg
     .split('\n')
     .filter(l => l)
     .map(l => {
-      const rs: any = {
-        msg: l,
-      };
+      const msgPart = parseMessage(l);
+      msgPart.posVParts = msgPart.parts.filter(p => p.type === 'number');
 
-      const m = /\d+/g.exec(l);
-
-      if (m) {
-        rs.index = m['index'];
-        rs.groups = m['groups'];
-        rs.v = m[0];
-        rs.value = +rs.v;
-        rs.leftPart = l.substring(0, rs.index - 1).trim();
-        rs.rightPart = l.substring(rs.index + rs.v.length, l.length).trim();
+      if (msgPart.parts.length > msgPartContainer.maxCol) {
+        msgPartContainer.maxCol = msgPart.parts.length;
       }
 
-      return rs;
+      if (msgPart.posVParts.length > msgPartContainer.maxPosCol) {
+        msgPartContainer.maxPosCol = msgPart.posVParts.length;
+      }
+
+      return msgPart;
     });
 
-  yield put(parsedMsgActions.parsedMsg(payload));
+  yield put(parsedMsgActions.parsedMsg(msgPartContainer));
 }
 
 export function* parsedMsgSaga() {

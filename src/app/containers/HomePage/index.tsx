@@ -7,8 +7,7 @@ export function HomePage() {
   return (
     <>
       <Helmet>
-        <title>Home Page</title>
-        <meta name="description" content="A Boilerplate application homepage" />
+        <title>bot</title>
       </Helmet>
       <div className="container-fluid">
         <br />
