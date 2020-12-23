@@ -98,7 +98,7 @@ describe('test parser', () => {
     const msgPart = parseMessage(msg);
     expect(msgPart.parts).toEqual([
       { shouldParse: false, text: 'Táo Granny smith', type: 'string' },
-      { shouldParse: false, text: '1000', type: 'number' },
+      { shouldParse: false, text: '1,000', type: 'number' },
       { shouldParse: false, text: '.', type: 'string' },
     ]);
   });

@@ -40,7 +40,7 @@ export default function parseMessage(msg: string): MsgPart {
     msgPart.parts.push({
       type: 'number',
       shouldParse: false,
-      text: m[0].replace(/[,.]/g, ''),
+      text: m[0],
     });
     tmp = tmp.substr(m.index + m[0].length).trim();
     m = new RegExp(regNs).exec(tmp);
