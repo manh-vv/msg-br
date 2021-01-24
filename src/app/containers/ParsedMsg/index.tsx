@@ -14,7 +14,7 @@ import { parsedMsgSaga } from './saga';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ReactTooltip from 'react-tooltip';
 
-function CopyableView({ id, text, type, onCopy = null }) {
+function CopyableView({ id, text, type, onCopy = null, isPos }) {
   const hint = 'click to copy';
   const [hintText, setHintText] = useState(hint);
 
@@ -24,15 +24,18 @@ function CopyableView({ id, text, type, onCopy = null }) {
       setHintText(hint);
     }, 300);
   }
+
+  let className: string = '';
+  if (isPos) {
+    className = 'text-info';
+  } else if (type === 'number') {
+    className = 'text-success';
+  }
+
   return (
     <>
       <CopyToClipboard text={text} onCopy={onCopy || handleCopy}>
-        <span
-          className={`${type === 'number' && 'text-success'}`}
-          data-tip
-          data-for={id}
-          style={{ cursor: 'pointer' }}
-        >
+        <span className={className} data-tip data-for={id} style={{ cursor: 'pointer' }}>
           {text}
         </span>
       </CopyToClipboard>
@@ -77,6 +80,7 @@ export function ParsedMsg() {
                             id={`${idx}_${i}_${p.text.replace(/[^\w]+/g, '')}`}
                             text={p.text}
                             type={p.type}
+                            isPos={p.isPos}
                           />{' '}
                         </span>
                       ))}
@@ -88,6 +92,7 @@ export function ParsedMsg() {
                             id={`${idx}_${i}_${p.text.replace(/[^\w]+/g, '')}`}
                             text={p.text}
                             type={p.type}
+                            isPos={p.isPos}
                           />
                         </td>
                       ))}
