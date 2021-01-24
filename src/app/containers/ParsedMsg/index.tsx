@@ -74,16 +74,18 @@ export function ParsedMsg() {
                   <tr key={idx}>
                     <th scope="row">{idx + 1}</th>
                     <td>
-                      {item.parts.map((p, i) => (
-                        <span key={i}>
-                          <CopyableView
-                            id={`${idx}_${i}_${p.text.replace(/[^\w]+/g, '')}`}
-                            text={p.text}
-                            type={p.type}
-                            isPos={p.isPos}
-                          />{' '}
-                        </span>
-                      ))}
+                      {item.parts
+                        .filter(p => !p.isGen)
+                        .map((p, i) => (
+                          <span key={i}>
+                            <CopyableView
+                              id={`${idx}_${i}_${p.text.replace(/[^\w]+/g, '')}`}
+                              text={p.text}
+                              type={p.type}
+                              isPos={p.isPos}
+                            />{' '}
+                          </span>
+                        ))}
                     </td>
                     {item.posVParts &&
                       item.posVParts.map((p, i) => (

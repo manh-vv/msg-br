@@ -3,6 +3,7 @@ export interface Part {
   text: string;
   shouldParse: boolean;
   isPos?: boolean;
+  isGen?: boolean;
 }
 
 export interface MsgPart {

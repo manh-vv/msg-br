@@ -43,9 +43,14 @@ export function* handleParseMessage(action: PayloadAction<{ line: string; idx: n
   );
 }
 
-const toWords = new ToWords();
+const toWords = new ToWords({
+  converterOptions: {
+    currency: true,
+  },
+  localeCode: 'en-US',
+});
 
-function writtenNumber(n) {
+function writtenNumber(n: number) {
   try {
     return toWords.convert(n);
   } catch (e) {
@@ -72,6 +77,7 @@ export function* handleSpellNumber(action: PayloadAction<{ line: string; idx: nu
         text: writtenNumber(+line),
         type: 'string',
         isPos: true,
+        isGen: true,
       },
     ],
   };
