@@ -1,5 +1,6 @@
 import { OriginalMsgState } from 'app/containers/OriginalMsg/types';
 import { ParsedMsgState } from 'app/containers/ParsedMsg/types';
+import { NavbarState } from 'app/containers/Navbar/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -9,5 +10,6 @@ import { ParsedMsgState } from 'app/containers/ParsedMsg/types';
 export interface RootState {
   originalMsg?: OriginalMsgState;
   parsedMsg?: ParsedMsgState;
+  navbar?: NavbarState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

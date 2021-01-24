@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { Footer } from '../Footer';
 import { OriginalMsg } from '../OriginalMsg';
 import { ParsedMsg } from '../ParsedMsg';
+import styled from 'styled-components/macro';
 
 export function HomePage() {
   return (
-    <>
+    <Div>
       <Helmet>
         <title>bot</title>
       </Helmet>
@@ -20,6 +22,12 @@ export function HomePage() {
           </div>
         </div>
       </div>
-    </>
+      <Footer />
+    </Div>
   );
 }
+
+const Div = styled.div`
+  position: relative;
+  height: 100vh;
+`;
